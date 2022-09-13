@@ -33,6 +33,7 @@ func main() {
 		service.WithPrometheus(),
 		service.WithPprof(),
 		service.WithHttpHandler("/", webSrv),
+		// service.WithTLS(),
 	)
 	lg.PanicError(ms.ListenAndServe(port()))
 }

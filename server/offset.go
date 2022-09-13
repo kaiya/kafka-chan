@@ -2,12 +2,14 @@ package server
 
 import (
 	"context"
+	"encoding/json"
 	"time"
 
 	"github.com/Kaiya/kafka-chan/kafkapb"
 	"github.com/Kaiya/kafka-chan/utils"
 	"github.com/hoveychen/kafka-go"
 	"github.com/pkg/errors"
+	"gitlab.momoso.com/cm/inventory/data-processing/dataprocpb"
 	"gitlab.momoso.com/mms2/utils/kafkautil"
 	"gitlab.momoso.com/mms2/utils/lg"
 )
@@ -42,6 +44,11 @@ func (s *Server) QueryMsgByOffset(ctx context.Context, in *kafkapb.QueryMsgByOff
 		}
 		lg.Info("decompressed done")
 		retByteArray = uncompressed
+	}
+	var msgPb dataprocpb.AssemblerResponse
+	err = json.Unmarshal(retByteArray, &msgPb)
+	if err != nil {
+		lg.Errorf("unmarshal error:%s", err)
 	}
 	return &kafkapb.QueryMsgByOffsetReply{
 		MsgJson: string(retByteArray),
