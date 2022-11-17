@@ -25,7 +25,7 @@ func main() {
 	server := server.NewServer(consumerId(), brokers())
 	webSrv := web.NewWebServer(*server)
 	ms := service.NewMicroService(
-		service.WithConsulName(flags.GetServiceName()),
+		service.WithConsulName("kafka-chan"),
 		service.WithGRPC(func(srv *grpc.Server) {
 			kafkapb.RegisterKafkaChanServer(srv, server)
 		}),
